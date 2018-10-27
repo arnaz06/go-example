@@ -3,10 +3,18 @@ package controller
 import (
 	"fmt"
 	"net/http"
+	"github.com/arnaz06/go-example/config"
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
+var db *gorm.DB
+var err error
+
 func AllArticle(w http.ResponseWriter, r *http.Request){
-	fmt.Fprintf(w, "All Article Endpoint Hit")
+	config.ping()
+
+
 }
 
 func NewArticle(w http.ResponseWriter, r *http.Request){
