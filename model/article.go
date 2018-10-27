@@ -10,11 +10,10 @@ var db *gorm.DB
 var err error
 
 type Article struct{
-	gorm.Model
-	id int64	`json:"Id"`
-	Title string	`json:"Title"`
-	Content string	`json:"Content"`
-	Thumbnail string	`json:"Thumbnail"`
+	ID int64	`gorm:"not null" json:"id"`
+	Title string	`gorm:"not null" json:"title"`
+	Content string	`gorm:"not null" json:"content"`
+	Thumbnail string	`gorm:"not null" json:"thumbnail"`
 
 }
 

@@ -12,6 +12,8 @@ import (
 var db *gorm.DB
 var err error
 
+
+
 func Ping(){
 	db, err= gorm.Open("mysql", "root:laskar45@/articles")
 	
@@ -29,7 +31,16 @@ func AllArticle(w http.ResponseWriter, r *http.Request){
 }
 
 func NewArticle(w http.ResponseWriter, r *http.Request){
-	fmt.Fprintf(w, "New Article Endpoint Hit")
+	Ping()
+	// decoder := json.NewDecoder(r.Body)
+	var article model.Article
+	if err := json.NewDecoder(r.Body).Decode(&article); err != nil{
+		panic(err)
+	}
+	if err:= db.Create(&article); err != nil{
+		panic(err)
+	}
+	fmt.Println(Article)
 }
 
 func Article(w http.ResponseWriter, r *http.Request){
