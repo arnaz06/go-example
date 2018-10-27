@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"github.com/gorilla/mux"
 	"./controller"
+	"./model"
 )
 
 
@@ -28,5 +29,7 @@ func handleRequests(){
 
 
 func main(){
+	fmt.Println("Starting APP in port 8881.......!")
+	model.InitialArticleMigration()
 	handleRequests()
 }
