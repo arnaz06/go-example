@@ -3,7 +3,8 @@ package controller
 import (
 	"fmt"
 	"net/http"
-	"github.com/arnaz06/go-example/config"
+	"../model"
+	"encoding/json"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
@@ -11,10 +12,20 @@ import (
 var db *gorm.DB
 var err error
 
+func Ping(){
+	db, err= gorm.Open("mysql", "root:laskar45@/articles")
+	
+		if err != nil{
+			panic("Faild to Connect to DB")
+		}
+	defer db.Close()
+}
+
 func AllArticle(w http.ResponseWriter, r *http.Request){
-	config.ping()
-
-
+	Ping()
+	var articles []model.Article
+	db.Find(&articles)
+	json.NewEncoder(w).Encode(articles)
 }
 
 func NewArticle(w http.ResponseWriter, r *http.Request){
