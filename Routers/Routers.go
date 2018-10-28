@@ -2,12 +2,13 @@ package Routers
 
 import(
 	"../Controllers"
+	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 )
 
 func SetupRouter() *gin.Engine {
 	r:= gin.Default()
-	r.Static("/image","../Public")
+	r.Use(static.Serve("/image", static.LocalFile("Public", false)))
 	v1 := r.Group("/v1")
 	{
 		v1.GET("articles", controller.AllArticle)
