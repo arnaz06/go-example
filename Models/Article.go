@@ -1,25 +1,18 @@
 package Models
 
 import (
-	"../Config"
-	_ "github.com/go-sql-driver/mysql"
+	"github.com/jinzhu/gorm"
 )
 
 
 
-
-func GetAllArticles(a *[]Article) (err error){
-	if err = Config.DB.Find(a).Error; err != nil{
-		return err
-	}
-	return nil
+type Article struct{
+	gorm.Model
+	Title 		string	`json:"title"`
+	Content 	string	`json:"content"`
+	Thumbnail string	`json:"thumbnail"`
 }
 
-func CreateArticle(a *Article) (err error) {
-	if err = Config.DB.Create(a).Error; err != nil {
-		return err
-	}
-	return nil
+func (a *Article) TableName() string{
+	return "articles"
 }
-
-
