@@ -12,7 +12,7 @@ func SetupRouter() *gin.Engine {
 	{
 		v1.GET("articles", controller.AllArticle)
 		v1.GET("article/:id", controller.Article)
-		// r.DELETE("/article/:title", controller.DeleteArticle)
+		v1.DELETE("/article/:id", controller.DeleteArticle)
 		v1.PUT("/article/:id", controller.UpdateArticle)
 		v1.POST("article", controller.CreateArticle)
 	}
