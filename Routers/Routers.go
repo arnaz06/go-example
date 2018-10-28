@@ -11,11 +11,11 @@ func SetupRouter() *gin.Engine {
 	r.Use(static.Serve("/image", static.LocalFile("Public", false)))
 	v1 := r.Group("/v1")
 	{
-		v1.GET("articles", controller.AllArticle)
-		v1.GET("article/:id", controller.Article)
-		v1.DELETE("/article/:id", controller.DeleteArticle)
-		v1.PUT("/article/:id", controller.UpdateArticle)
-		v1.POST("article", controller.CreateArticle)
+		v1.GET("articles", Controllers.AllArticle)
+		v1.GET("article/:id", Controllers.Article)
+		v1.DELETE("/article/:id", Controllers.DeleteArticle)
+		v1.PUT("/article/:id", Controllers.UpdateArticle)
+		v1.POST("article", Controllers.CreateArticle)
 	}
 	return r
 }

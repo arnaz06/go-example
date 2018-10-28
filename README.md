@@ -7,5 +7,14 @@
 4. setup environment variable
 5. create public directory : ```$ mkdir Public```
 
-### Run project
+### Run Project
 ```$ go run main.go```
+
+
+## Run Test
+1. For test Controller 
+```$ cd Controllers``
+```$ go test ```
+2. For test Models
+``` $ cd Models ```
+``` $ go test ```
