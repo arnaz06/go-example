@@ -3,6 +3,7 @@ package controller
 import(
 	"../ApiHelpers"
 	"../Models"
+	"fmt"
 	"github.com/gin-gonic/gin"
 )
 
@@ -20,28 +21,19 @@ func AllArticle(c *gin.Context){
 
 func CreateArticle(c *gin.Context) {
 	var article Models.Article
-	c.BindJSON(&article)
+	fmt.Println(c.PostForm("title"))
+	article.Title= c.PostForm("title")
+	article.Content= c.PostForm("content")
+	article.Thumbnail= c.PostForm("thumbnail")
 	err := Models.CreateArticle(&article)
 	if err != nil {
 		ApiHelpers.RespondJSON(c, 404, article)
 	} else {
-		ApiHelpers.RespondJSON(c, 200, article)
+		ApiHelpers.RespondJSON(c, 201, article)
 	}
 }
 
-// func NewArticle(w http.ResponseWriter, r *http.Request){
-// 	Ping()
-// 	// fmt.Println(r.Body)
-// 	var article model.Article
-// 	if err := json.NewDecoder(r.Body).Decode(&article); err != nil{
-// 		fmt.Printf("%+v\n", article)
-// 		panic(err)
-// 	}
-// 	if err:= db.Create(&article); err != nil{
-// 		panic(err)
-// 	}
-// 	// fmt.Println(Article)
-// }
+
 
 // func Article(w http.ResponseWriter, r *http.Request){
 // 	fmt.Fprintf(w, "Article Endpoint Hit")
