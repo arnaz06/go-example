@@ -3,9 +3,10 @@ package controller
 import(
 	"../ApiHelpers"
 	"../Models"
-	// "net/http"
+	"net/http"
 	"fmt"
 	"../Config"
+	"os"
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -23,21 +24,19 @@ func AllArticle(c *gin.Context){
 }
 
 func CreateArticle(c *gin.Context) {
+	file, err := c.FormFile("thumbnail")
+	if err !=nil{
+		c.String(http.StatusBadRequest, fmt.Sprintf("get form err: %s", err.Error()))
+	}
+	if err:= c.SaveUploadedFile(file, "Public/"+file.Filename); err != nil{
+		c.String(http.StatusBadRequest, fmt.Sprintf("upload file err: %s", err.Error()))
+	}
 	var article Models.Article
-	// form, err := c.MultipartForm()
-	// if err != nil {
-	// 	c.String(http.StatusBadRequest, fmt.Sprintf("get form err : 	%s",err.Error()))
-	// 	return 
-	// }
-	// Files := form.File["files"]
-	// fmt.Println(Files)
-	
-	// file := c.FormFile("thumbnail")
-	// fmt.Println(file)
 	article.Title= c.PostForm("title")
 	article.Content= c.PostForm("content")
-	article.Thumbnail= c.PostForm("thumbnail")
-	err := Config.DB.Create(&article).Error
+	baseUrlImage := os.Getenv("BASE_IMAGE_URL")
+	article.Thumbnail= baseUrlImage+file.Filename
+	err = Config.DB.Create(&article).Error
 	if err != nil {
 		ApiHelpers.RespondJSON(c, 404, article)
 	} else {
@@ -58,15 +57,23 @@ func Article(c *gin.Context){
 }
 
 func UpdateArticle(c *gin.Context){
+	file, err := c.FormFile("thumbnail")
+	if err != nil{
+		c.String(http.StatusBadRequest, fmt.Sprintf("get form err: %s", err.Error()))
+	}
+	if err:= c.SaveUploadedFile(file, "Public/"+file.Filename); err != nil{
+		c.String(http.StatusBadRequest, fmt.Sprintf("upload file err: %s", err.Error()))
+	}
 	id := c.Params.ByName("id")
 	var article Models.Article
-	err := Config.DB.Where("id = ?", id).First(&article).Error
+	err = Config.DB.Where("id = ?", id).First(&article).Error
 	if err != nil{
 		ApiHelpers.RespondJSON(c, 404, article)
 	}
 	article.Title= c.PostForm("title")
 	article.Content= c.PostForm("content")
-	article.Thumbnail= c.PostForm("thumbnail")
+	baseUrlImage := os.Getenv("BASE_IMAGE_URL")
+	article.Thumbnail= baseUrlImage+file.Filename
 	err = Config.DB.Save(&article).Error
 	if err != nil{
 		ApiHelpers.RespondJSON(c,404, article)

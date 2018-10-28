@@ -6,18 +6,26 @@ import(
 	"./Routers"
 	"fmt"
 	"github.com/jinzhu/gorm"
+	"github.com/joho/godotenv"
+	"os"
 )
 
 var err error
 
 func main(){
-	Config.DB, err = gorm.Open("mysql", "root:laskar45@tcp(127.0.0.1:3306)/articles?charset=utf8&parseTime=True&loc=Local")
+	err = godotenv.Load()
+	if err != nil{
+		fmt.Println("error load .env file")
+	}
+	urlDB := os.Getenv("DB_URL")
+	portApp := os.Getenv("PORT_APP")
+	Config.DB, err = gorm.Open("mysql", urlDB)
 	if err != nil{
 		fmt.Println("status: ",err)
 	}
 	defer Config.DB.Close()
 	Config.DB.AutoMigrate(&Models.Article{})
 	r:= Routers.SetupRouter()
-	r.Run(":8081")
+	r.Run(portApp)
 }
 
