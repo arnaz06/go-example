@@ -57,11 +57,23 @@ func Article(c *gin.Context){
 	}
 }
 
-
-
-// func UpdateArticle(w http.ResponseWriter, r *http.Request){
-// 	fmt.Fprintf(w, "Update Article Endpoint Hit")
-// }
+func UpdateArticle(c *gin.Context){
+	id := c.Params.ByName("id")
+	var article Models.Article
+	err := Config.DB.Where("id = ?", id).First(&article).Error
+	if err != nil{
+		ApiHelpers.RespondJSON(c, 404, article)
+	}
+	article.Title= c.PostForm("title")
+	article.Content= c.PostForm("content")
+	article.Thumbnail= c.PostForm("thumbnail")
+	err = Config.DB.Save(&article).Error
+	if err != nil{
+		ApiHelpers.RespondJSON(c,404, article)
+	}else{
+		ApiHelpers.RespondJSON(c,200, article)
+	}
+}
 
 // func DeleteArticle(w http.ResponseWriter, r *http.Request){
 // 	fmt.Fprintf(w, "Delete Article Endpoint Hit")
