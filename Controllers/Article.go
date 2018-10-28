@@ -15,7 +15,7 @@ import(
 
 func AllArticle(c *gin.Context){
 	var article []Models.Article
-	err := Config.DB.Find(article).Error
+	err := Config.DB.Find(&article).Error
 	if err != nil{
 		ApiHelpers.RespondJSON(c, 404, article)
 	}
@@ -75,11 +75,13 @@ func UpdateArticle(c *gin.Context){
 	}
 }
 
-// func DeleteArticle(w http.ResponseWriter, r *http.Request){
-// 	fmt.Fprintf(w, "Delete Article Endpoint Hit")
-// }
-
-
-// func SearchArticle(w http.ResponseWriter, r *http.Request){
-// 	fmt.Fprintf(w, "Search Article Endpoint Hit")
-// }
+func DeleteArticle(c *gin.Context){
+	id := c.Params.ByName("id")
+	var article Models.Article
+	err := Config.DB.Where("id = ?", id).Delete(&article).Error
+	if err != nil{
+		ApiHelpers.RespondJSON(c,404, article)
+	}else{
+		ApiHelpers.RespondJSON(c,200, gin.H{"id #"+id:"deleted"})
+	}
+}
