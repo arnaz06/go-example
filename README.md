@@ -13,8 +13,8 @@
 
 ## Run Test
 1. For test Controller 
-```$ cd Controllers``
+```$ cd Controllers``` and
 ```$ go test ```
 2. For test Models
-``` $ cd Models ```
+``` $ cd Models ``` and
 ``` $ go test ```
