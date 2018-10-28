@@ -29,22 +29,6 @@ func CreateArticle(c *gin.Context) {
 	}
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // func NewArticle(w http.ResponseWriter, r *http.Request){
 // 	Ping()
 // 	// fmt.Println(r.Body)
