@@ -1,4 +1,4 @@
-# Go Example Project With Gin 
+# Go Example  With Gin Framework 
 
 ### How to install
 1. clone this project ```$ git clone ```
