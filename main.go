@@ -1,37 +1,23 @@
 package main
 
-import (
+import(
+	"./Config"
+	"./Models"
+	"./Routers"
 	"fmt"
-	"net/http"
-	"github.com/gorilla/mux"
-	"./controller"
-	"./model"
-	"log"
+	"github.com/jinzhu/gorm"
 )
 
-
-func homePage(w http.ResponseWriter, r *http.Request){
-	fmt.Fprint(w, "Homepage endpoint")
-}
-
-
-
-func handleRequests(){
-	myRouter := mux.NewRouter().StrictSlash(true)
-	myRouter.HandleFunc("/", homePage)
-	myRouter.HandleFunc("/articles", controller.AllArticle).Methods("GET")
-	myRouter.HandleFunc("/article/{title}", controller.Article).Methods("GET")
-	myRouter.HandleFunc("/article/{title}", controller.DeleteArticle).Methods("DELETE")
-	myRouter.HandleFunc("/article/{title}", controller.UpdateArticle).Methods("PUT")
-	myRouter.HandleFunc("/article", controller.NewArticle).Methods("POST")
-	log.Fatal(http.ListenAndServe(":8881", myRouter))	
-}
-
+var err error
 
 func main(){
-	fmt.Println("Starting APP in port 8881.......!")
-	model.InitialArticleMigration()
-	handleRequests()
+	Config.DB, err = gorm.Open("mysql", "root:laskar45@tcp(127.0.0.1:3306)/articles?charset=utf8&parseTime=True&loc=Local")
+	if err != nil{
+		fmt.Println("status: ",err)
+	}
+	defer Config.DB.Close()
+	Config.DB.AutoMigrate(&Models.Article{})
+	r:= Routers.SetupRouter()
+	r.Run(":8081")
 }
-
 
