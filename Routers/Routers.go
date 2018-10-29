@@ -3,11 +3,13 @@ package Routers
 import(
 	"../Controllers"
 	"github.com/gin-contrib/static"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
 func SetupRouter() *gin.Engine {
 	r:= gin.Default()
+	r.Use(cors.Default())
 	r.Use(static.Serve("/image", static.LocalFile("Public", false)))
 	v1 := r.Group("/v1")
 	{
