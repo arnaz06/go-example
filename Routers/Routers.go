@@ -19,7 +19,6 @@ func SetupRouter() *gin.Engine {
 		v1.DELETE("article/:id", Controllers.DeleteArticle)
 		v1.PUT("article/:id", Controllers.UpdateArticle)
 		v1.POST("article", Controllers.CreateArticle)
-		v1.GET("download/image", Controllers.DownloadImage)
 	}
 	return r
 }
