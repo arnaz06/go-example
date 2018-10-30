@@ -57,29 +57,43 @@ func Article(c *gin.Context){
 }
 
 func UpdateArticle(c *gin.Context){
-	file, err := c.FormFile("thumbnail")
-	if err != nil{
-		c.String(http.StatusBadRequest, fmt.Sprintf("get form err: %s", err.Error()))
-	}
-	if err:= c.SaveUploadedFile(file, "Public/"+file.Filename); err != nil{
-		c.String(http.StatusBadRequest, fmt.Sprintf("upload file err: %s", err.Error()))
-	}
-	id := c.Params.ByName("id")
+	imgNil := c.PostForm("imgNil")
 	var article Models.Article
-	err = Config.DB.Where("id = ?", id).First(&article).Error
-	if err != nil{
-		ApiHelpers.RespondJSON(c, 404, article)
-	}
-	article.Title= c.PostForm("title")
-	article.Content= c.PostForm("content")
-	baseUrlImage := os.Getenv("BASE_IMAGE_URL")
-	article.Thumbnail= baseUrlImage+file.Filename
-	err = Config.DB.Save(&article).Error
-	if err != nil{
-		ApiHelpers.RespondJSON(c,404, article)
+	if imgNil == "notNil"{
+		file, err := c.FormFile("thumbnail")
+		if err != nil{
+			c.String(http.StatusBadRequest, fmt.Sprintf("get form err: %s", err.Error()))
+		}
+		if err:= c.SaveUploadedFile(file, "Public/"+file.Filename); err != nil{
+			c.String(http.StatusBadRequest, fmt.Sprintf("upload file err: %s", err.Error()))
+		}
+		id := c.Params.ByName("id")
+		err = Config.DB.Where("id = ?", id).First(&article).Error
+		if err != nil{
+			ApiHelpers.RespondJSON(c, 404, article)
+		}
+		baseUrlImage := os.Getenv("BASE_IMAGE_URL")
+		article.Thumbnail= baseUrlImage+file.Filename
+		article.Title= c.PostForm("title")
+		article.Content= c.PostForm("content")
+		err = Config.DB.Save(&article).Error
+		if err != nil{
+			ApiHelpers.RespondJSON(c,404, article)
+		}else{
+			ApiHelpers.RespondJSON(c,200, article)
+		}
 	}else{
-		ApiHelpers.RespondJSON(c,200, article)
+		article.Thumbnail= c.PostForm("ifNotUpdateImage")
+		article.Title= c.PostForm("title")
+		article.Content= c.PostForm("content")
+		err := Config.DB.Save(&article).Error
+		if err != nil{
+			ApiHelpers.RespondJSON(c,404, article)
+		}else{
+			ApiHelpers.RespondJSON(c,200, article)
 	}
+	}
+	
 }
 
 func DeleteArticle(c *gin.Context){
