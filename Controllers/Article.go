@@ -92,3 +92,16 @@ func DeleteArticle(c *gin.Context){
 		ApiHelpers.RespondJSON(c,200, gin.H{"id #"+id:"deleted"})
 	}
 }
+
+func SearchArticle(c * gin.Context){
+	title := c.Query("title")
+	_title := "%"+title+"%"
+	fmt.Println(_title)
+	var articles []Models.Article
+	err := Config.DB.Where("title LIKE ?", _title ).Find(&articles).Error
+	if err != nil{
+		ApiHelpers.RespondJSON(c, 404, articles)
+	}else{
+		ApiHelpers.RespondJSON(c,200, articles)
+	}
+}
