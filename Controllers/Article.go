@@ -7,8 +7,6 @@ import(
 	"fmt"
 	"../Config"
 	"os"
-	"strings"
-	"io"
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
 )
